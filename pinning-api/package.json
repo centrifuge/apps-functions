@@ -1,0 +1,35 @@
+{
+  "name": "pinning-api",
+  "version": "1.0.0",
+  "description": "IPFS pinning service using Pinata API, deployed to Cloudflare Workers",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "node esbuild.config.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:prod": "wrangler deploy --env production"
+  },
+  "keywords": [
+    "ipfs",
+    "pinata",
+    "cloudflare-workers",
+    "pinning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240222.0",
+    "@types/eslint": "^8",
+    "@types/node": "^18.7.16",
+    "dotenv": "^16.0.0",
+    "esbuild": "^0.16.17",
+    "eslint": "^8.23.1",
+    "typescript": "~5.3.3",
+    "wrangler": "^4.46.0"
+  }
+}
