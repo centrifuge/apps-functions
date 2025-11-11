@@ -39,8 +39,7 @@ function createCorsResponse(origin: string | null, status: number = 200): Respon
 }
 
 interface Env {
-  PINATA_API_KEY?: string
-  PINATA_SECRET_API_KEY?: string
+  PINATA_JWT?: string
 }
 
 export default {
@@ -112,3 +111,4 @@ export default {
     }
   },
 }
+

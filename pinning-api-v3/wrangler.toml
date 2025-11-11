@@ -6,7 +6,10 @@ compatibility_flags = ["nodejs_compat"]
 [env.production]
 name = "pinning-api"
 compatibility_flags = ["nodejs_compat"]
+routes = [
+  { pattern = "pinning.centrifuge.io", custom_domain = true }
+]
 # Secrets should be set using: wrangler secret put <SECRET_NAME>
 # Required secrets:
-# - PINATA_API_KEY
-# - PINATA_SECRET_API_KEY
+# - PINATA_JWT
+

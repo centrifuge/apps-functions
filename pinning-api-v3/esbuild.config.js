@@ -6,8 +6,8 @@ esbuild
     outfile: 'dist/index.js',
     bundle: true,
     minify: true,
-    platform: 'neutral', // Cloudflare Workers use neutral platform
-    format: 'esm', // Workers use ES modules
+    platform: 'neutral',
+    format: 'esm',
     sourcemap: true,
     target: 'es2022',
     define: {
@@ -15,3 +15,4 @@ esbuild
     },
   })
   .catch(() => process.exit(1))
+
