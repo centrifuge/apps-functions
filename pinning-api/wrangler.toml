@@ -1,13 +1,10 @@
-name = "functions-prod"
+name = "pinning-api"
 main = "dist/index.js"
 compatibility_date = "2025-11-11"
 compatibility_flags = ["nodejs_compat"]
-# Routes are configured in Cloudflare Dashboard
-# Expected route pattern: functions.centrifuge.io/api/pinning/*
-# The worker extracts the last path segment (pinFile, pinJson) to route requests
 
 [env.production]
-name = "functions-prod"
+name = "pinning-api"
 compatibility_flags = ["nodejs_compat"]
 # Secrets should be set using: wrangler secret put <SECRET_NAME>
 # Required secrets:

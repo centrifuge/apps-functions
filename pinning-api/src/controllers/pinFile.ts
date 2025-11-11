@@ -43,7 +43,19 @@ export default async (request: Request, env: Env): Promise<Response> => {
 
     // pin the image file
     const pinFileResponse = await pinFile(blob, env)
+    
+    // Validate response structure
+    if (!pinFileResponse?.data?.IpfsHash) {
+      throw new Error('Invalid response from Pinata API: missing IpfsHash')
+    }
+    
     const fileHash = pinFileResponse.data.IpfsHash
+    
+    // Validate hash is not empty
+    if (!fileHash || typeof fileHash !== 'string' || fileHash.trim().length === 0) {
+      throw new Error('Invalid IPFS hash received from Pinata API')
+    }
+    
     const fileURL = ipfsHashToURI(fileHash)
 
     return new Response(JSON.stringify({ uri: fileURL }), {

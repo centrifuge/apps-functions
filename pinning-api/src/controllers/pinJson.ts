@@ -9,7 +9,7 @@ interface Env {
 
 export default async (request: Request, env: Env): Promise<Response> => {
   try {
-    const body = await request.json()
+    const body = await request.json() as { json?: any }
     const { json } = body
     
     if (!json) {
@@ -17,7 +17,19 @@ export default async (request: Request, env: Env): Promise<Response> => {
     }
 
     const pinJsonResponse = await pinJson(json, env)
+    
+    // Validate response structure
+    if (!pinJsonResponse?.data?.IpfsHash) {
+      throw new Error('Invalid response from Pinata API: missing IpfsHash')
+    }
+    
     const jsonHash = pinJsonResponse.data.IpfsHash
+    
+    // Validate hash is not empty
+    if (!jsonHash || typeof jsonHash !== 'string' || jsonHash.trim().length === 0) {
+      throw new Error('Invalid IPFS hash received from Pinata API')
+    }
+    
     const jsonURL = ipfsHashToURI(jsonHash)
 
     return new Response(JSON.stringify({ uri: jsonURL }), {
