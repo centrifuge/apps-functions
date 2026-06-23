@@ -41,13 +41,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --env production
           workingDirectory: pinning-api-v3
-
-      - name: Set Cloudflare Worker Secret
-        working-directory: pinning-api-v3
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          PINATA_JWT: ${{ secrets.PINATA_JWT }}
-        run: |
-          echo "$PINATA_JWT" | pnpm wrangler secret put PINATA_JWT --env production
-

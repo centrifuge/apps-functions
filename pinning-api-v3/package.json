@@ -6,11 +6,14 @@
   "type": "module",
   "scripts": {
     "build": "node esbuild.config.js",
-    "dev": "wrangler dev",
+    "dev": "wrangler dev src/index.ts",
+    "dev:setup": "cp .env .dev.vars && echo 'Created .dev.vars from .env'",
     "deploy": "wrangler deploy",
     "deploy:prod": "wrangler deploy --env production",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:unit": "vitest run src/__tests__/worker.test.ts src/controllers/__tests__/pinFile.unit.test.ts src/controllers/__tests__/pinJson.unit.test.ts",
+    "test:watch": "vitest",
+    "test:deployed": "tsx test-deployed.ts"
   },
   "keywords": [
     "ipfs",

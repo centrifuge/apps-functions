@@ -3,13 +3,21 @@ main = "dist/index.js"
 compatibility_date = "2025-11-11"
 compatibility_flags = ["nodejs_compat"]
 
+[env.dev]
+name = "pinning-api-dev"
+workers_dev = true
+compatibility_flags = ["nodejs_compat"]
+routes = [
+  { pattern = "pinning.centrifugelabs.io", custom_domain = true }
+]
+
 [env.production]
 name = "pinning-api"
 compatibility_flags = ["nodejs_compat"]
 routes = [
   { pattern = "pinning.centrifuge.io", custom_domain = true }
 ]
-# Secrets should be set using: wrangler secret put <SECRET_NAME>
+# Secrets should be set using: wrangler secret put <SECRET_NAME> --env <ENV>
 # Required secrets:
 # - PINATA_JWT
 

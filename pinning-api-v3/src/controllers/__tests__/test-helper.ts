@@ -66,21 +66,25 @@ export async function cleanupTestPins(jwt: string): Promise<void> {
 
   console.log(`Cleaning up ${pins.length} test pin(s)...`)
   
-  const pinata = new PinataSDK({
-    pinataJwt: jwt,
-  })
+  const pinata = new PinataSDK({ pinataJwt: jwt })
 
-  // Delete all files in one batch call (V3 API)
-  try {
-    const cids = pins.map((p) => p.cid)
-    await pinata.files.public.delete(cids)
-    console.log(`  ✓ Deleted ${pins.length} pin(s)`)
-  } catch (error: any) {
-    console.warn(`  ✗ Failed to delete pins:`, error.message)
+  // Pinata V3 delete requires internal file UUIDs, not CIDs.
+  // Look up each file's UUID by CID first, then delete by UUID.
+  for (const pin of pins) {
+    try {
+      const list = await pinata.files.public.list().cid(pin.cid)
+      const file = list.files?.[0]
+      if (!file?.id) {
+        console.warn(`  ⚠ No file found for CID ${pin.cid} — already deleted?`)
+        continue
+      }
+      await pinata.files.public.delete([file.id])
+      console.log(`  ✓ Deleted ${pin.cid} (id: ${file.id})`)
+    } catch (error: any) {
+      console.warn(`  ✗ Failed to delete ${pin.cid}:`, error.message)
+    }
   }
 
-  // Clear the file after cleanup
   clearTestPinsFile()
   console.log('✓ Cleanup complete')
 }
-
