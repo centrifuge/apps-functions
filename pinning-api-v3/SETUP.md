@@ -24,22 +24,46 @@ All 10 tests should pass and automatically cleanup test pins.
 
 ## 3. Test Locally
 
+Wrangler reads secrets from `.dev.vars` (not `.env`) when running locally.
+Create it once from your existing `.env`:
+
+```bash
+pnpm dev:setup   # copies .env → .dev.vars (gitignored)
+```
+
+Then start the local worker (no build step needed — Wrangler compiles TypeScript directly):
+
 ```bash
 pnpm dev
 ```
 
-Then test the endpoints:
-```bash
-# Test pinJson
-curl -X POST http://localhost:8787/api/pinning/pinJson \
-  -H "Content-Type: application/json" \
-  -d '{"json": {"test": "data"}}'
+The worker runs at `http://localhost:8787`. The origin check requires an `Origin`
+header that matches an allowed domain, so use `-H "Origin: http://localhost"` with curl:
 
-# Test pinFile (with a data URI)
-curl -X POST http://localhost:8787/api/pinning/pinFile \
+```bash
+# Pin JSON
+curl -X POST http://localhost:8787/pinJson \
   -H "Content-Type: application/json" \
+  -H "Origin: http://localhost" \
+  -d '{"json": {"name": "test", "value": 42}}'
+# → {"uri":"ipfs://Qm..."}
+
+# Pin a file (base64 data URI — "Hello World" as plain text)
+curl -X POST http://localhost:8787/pinFile \
+  -H "Content-Type: application/json" \
+  -H "Origin: http://localhost" \
   -d '{"uri": "data:text/plain;base64,SGVsbG8gV29ybGQ="}'
+# → {"uri":"ipfs://Qm..."}
+
+# CORS preflight (should return 204)
+curl -v -X OPTIONS http://localhost:8787/pinFile \
+  -H "Origin: http://localhost" \
+  -H "Access-Control-Request-Method: POST"
 ```
+
+> **Note:** The worker enforces an origin allowlist (`*.centrifuge.io`, `*.k-f.dev`,
+> `*.centrifugelabs.io`, and `localhost`). Requests without a matching `Origin` header
+> return 405. This is by design — it only matters for curl/scripts, not browsers.
 
 ## 4. Deploy
 
