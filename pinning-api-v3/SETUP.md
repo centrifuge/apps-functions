@@ -61,8 +61,8 @@ curl -v -X OPTIONS http://localhost:8787/pinFile \
   -H "Access-Control-Request-Method: POST"
 ```
 
-> **Note:** The worker enforces an origin allowlist (`*.centrifuge.io`, `*.k-f.dev`,
-> `*.centrifugelabs.io`, and `localhost`). Requests without a matching `Origin` header
+> **Note:** The worker enforces an origin allowlist (`*.centrifuge.io`,
+> `*.centrifugelabs.io` and `localhost`). Requests without a matching `Origin` header
 > return 405. This is by design — it only matters for curl/scripts, not browsers.
 
 ## 4. Deploy

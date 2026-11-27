@@ -30,6 +30,10 @@ jobs:
         working-directory: pinning-api-v3
         run: pnpm install --frozen-lockfile
 
+      - name: Unit tests
+        working-directory: pinning-api-v3
+        run: pnpm test:unit
+
       - name: Build
         working-directory: pinning-api-v3
         run: pnpm build
