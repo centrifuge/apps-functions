@@ -14,17 +14,24 @@ const routes = [
   },
 ]
 
-const centrifugeDomains = [
-  /^(https:\/\/.*centrifuge\.io)/,
-  /^(https:\/\/.*k-f\.dev)/,
-  /^(https:\/\/.*centrifugelabs\.io)/,
-]
+const centrifugeDomains = ['centrifuge.io', 'k-f.dev', 'centrifugelabs.io']
 
 function checkOrigin(origin: string | null): boolean {
   if (!origin) return false
-  const isCentrifugeDomain = centrifugeDomains.some((regex) => regex.test(origin))
-  const isLocalhost = /^http:\/\/localhost(:\d+)?$/.test(origin)
-  return isCentrifugeDomain || isLocalhost
+
+  try {
+    const url = new URL(origin)
+    const hostname = url.hostname.toLowerCase()
+    const isCentrifugeDomain =
+      url.protocol === 'https:' &&
+      centrifugeDomains.some(
+        (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+      )
+    const isLocalhost = url.protocol === 'http:' && hostname === 'localhost'
+    return isCentrifugeDomain || isLocalhost
+  } catch {
+    return false
+  }
 }
 
 function createCorsResponse(origin: string | null, status: number = 200): Response {

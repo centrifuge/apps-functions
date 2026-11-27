@@ -88,6 +88,40 @@ describe('worker fetch handler', () => {
       expect(response.status).toBe(200)
     })
 
+    it('allows an apex Centrifuge domain', async () => {
+      vi.mocked(pinFile).mockResolvedValue(okResponse())
+      const request = makeRequest('https://pinning.centrifuge.io/pinFile', {
+        method: 'POST',
+        headers: { Origin: 'https://centrifuge.io' },
+      })
+
+      const response = await worker.fetch(request, env)
+
+      expect(response.status).toBe(200)
+    })
+
+    it('rejects hostnames that only end with the allowlisted text', async () => {
+      const request = makeRequest('https://pinning.centrifuge.io/pinFile', {
+        method: 'POST',
+        headers: { Origin: 'https://evilcentrifuge.io' },
+      })
+
+      const response = await worker.fetch(request, env)
+
+      expect(response.status).toBe(405)
+    })
+
+    it('rejects hostnames that append a suffix to an allowlisted domain', async () => {
+      const request = makeRequest('https://pinning.centrifuge.io/pinFile', {
+        method: 'POST',
+        headers: { Origin: 'https://centrifuge.io.evil.com' },
+      })
+
+      const response = await worker.fetch(request, env)
+
+      expect(response.status).toBe(405)
+    })
+
     it('allows http://localhost', async () => {
       vi.mocked(pinFile).mockResolvedValue(okResponse())
       const request = makeRequest('https://pinning.centrifuge.io/pinFile', {
