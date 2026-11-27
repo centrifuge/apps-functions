@@ -64,18 +64,6 @@ describe('worker fetch handler', () => {
       expect(response.status).toBe(200)
     })
 
-    it('allows https://*.k-f.dev origins', async () => {
-      vi.mocked(pinFile).mockResolvedValue(okResponse())
-      const request = makeRequest('https://pinning.centrifuge.io/pinFile', {
-        method: 'POST',
-        headers: { Origin: 'https://app.k-f.dev' },
-      })
-
-      const response = await worker.fetch(request, env)
-
-      expect(response.status).toBe(200)
-    })
-
     it('allows https://*.centrifugelabs.io origins', async () => {
       vi.mocked(pinFile).mockResolvedValue(okResponse())
       const request = makeRequest('https://pinning.centrifuge.io/pinFile', {

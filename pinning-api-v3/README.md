@@ -179,7 +179,6 @@ src/
 
 Allowed origins:
 - `https://*.centrifuge.io`
-- `https://*.k-f.dev`
 - `https://*.centrifugelabs.io`
 - `http://localhost` / `http://localhost:<port>`
 

@@ -14,7 +14,7 @@ const routes = [
   },
 ]
 
-const centrifugeDomains = ['centrifuge.io', 'k-f.dev', 'centrifugelabs.io']
+const centrifugeDomains = ['centrifuge.io', 'centrifugelabs.io']
 
 function checkOrigin(origin: string | null): boolean {
   if (!origin) return false
